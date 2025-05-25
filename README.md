@@ -1,6 +1,6 @@
-# WebXR Canvas Panel
+# WebXR Interactive Panel
 
-An interactive WebXR application featuring a canvas panel that responds to VR controller interactions. Built with Three.js and Vite.
+An interactive WebXR application featuring a dynamic canvas panel that responds to VR controller interactions. Built with Three.js and Vite.
 
 ## Features
 

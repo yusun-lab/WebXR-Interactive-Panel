@@ -1,4 +1,5 @@
 {
+  "name": "webxr-interactive-panel",
   "devDependencies": {
     "vite": "^6.3.5"
   },
