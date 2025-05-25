@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
-import { SceneLighting } from './src/components/lighting/SceneLighting.js';
-import { ControllerManager } from './src/components/controllers/ControllerManager.js';
-import { CanvasPanel } from './src/components/panel/CanvasPanel.js';
+import { SceneLighting } from './components/lighting/SceneLighting.js';
+import { ControllerManager } from './components/controllers/ControllerManager.js';
+import { CanvasPanel } from './components/panel/CanvasPanel.js';
 
 let camera, scene, renderer;
 let sceneLighting, controllerManager, canvasPanel;
