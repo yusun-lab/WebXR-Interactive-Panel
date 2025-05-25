@@ -2,11 +2,13 @@ import * as THREE from 'three';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
 import { addControllerRayLine, setRayLineAppearance } from './controllerRayLine.js';
+import { SceneLighting } from './src/components/lighting/SceneLighting.js';
 
 let camera, scene, renderer;
 let canvasMesh, raycaster, intersected;
 let controllers = [], controllerGrips = [], cubes = [], rayLines = [];
 let raycastingActive = false;
+let sceneLighting;
 
 init();
 
@@ -21,14 +23,8 @@ function init() {
   scene.background = new THREE.Color(0x222222);
   camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
 
-  // 添加环境光
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-  scene.add(ambientLight);
-
-  // 添加平行光
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-  directionalLight.position.set(0, 1, 1);
-  scene.add(directionalLight);
+  // Initialize scene lighting
+  sceneLighting = new SceneLighting(scene);
 
   // Canvas Panel (320x180 px, scaled for VR)
   const canvas = document.createElement('canvas');
