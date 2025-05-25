@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
-import { addControllerRayLine, setRayLineAppearance } from './controllerRayLine.js';
+import { ControllerCube } from './ControllerCube.js';
 
 export class ControllerManager {
   constructor(renderer, scene) {
@@ -8,7 +8,7 @@ export class ControllerManager {
     this.scene = scene;
     this.controllers = [];
     this.controllerGrips = [];
-    this.rayLines = [];
+    this.controllerCubes = [];
     this.raycastingActive = false;
     this.intersected = null;
     
@@ -30,9 +30,9 @@ export class ControllerManager {
       this.scene.add(controllerGrip);
       this.controllerGrips.push(controllerGrip);
 
-      // Add ray line directly to controller
-      const rayLine = addControllerRayLine(controller, 0x00ff00, 0.005, 1);
-      this.rayLines.push(rayLine);
+      // Add controller cube with ray line
+      const controllerCube = new ControllerCube(controller);
+      this.controllerCubes.push(controllerCube);
     }
 
     // Setup XR session events
@@ -48,23 +48,28 @@ export class ControllerManager {
   }
 
   onSelectStart(event, index) {
-    setRayLineAppearance(this.rayLines[index], { color: 0xff0000, thickness: 0.02 });
+    // Update ray line appearance for the selected controller
+    this.controllerCubes[index].updateRayLineAppearance({
+      color: 0xff0000,
+      thickness: 0.02
+    });
+
     if (this.intersected) {
       this.intersected.material.color.set(0xff0000); // Highlight on select
     }
   }
 
   onSelectEnd(event, index) {
-    setRayLineAppearance(this.rayLines[index], { color: 0x00ff00, thickness: 0.005 });
+    // Reset ray line appearance
+    this.controllerCubes[index].resetRayLineAppearance();
+
     if (this.intersected) {
       this.intersected.material.color.set(0xffffff); // Reset color
     }
   }
 
   resetRayLines() {
-    this.rayLines.forEach((line) => 
-      setRayLineAppearance(line, { color: 0x00ff00, thickness: 0.005 })
-    );
+    this.controllerCubes.forEach(cube => cube.resetRayLineAppearance());
   }
 
   resetIntersection() {
