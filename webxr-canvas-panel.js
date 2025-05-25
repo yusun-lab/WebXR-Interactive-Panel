@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { SceneLighting } from './src/components/lighting/SceneLighting.js';
 import { ControllerManager } from './src/components/controllers/ControllerManager.js';
+import { CanvasPanel } from './src/components/panel/CanvasPanel.js';
 
 let camera, scene, renderer;
-let canvasMesh;
-let sceneLighting, controllerManager;
+let sceneLighting, controllerManager, canvasPanel;
 
 init();
 
@@ -23,36 +23,15 @@ function init() {
   // Initialize components
   sceneLighting = new SceneLighting(scene);
   controllerManager = new ControllerManager(renderer, scene);
-
-  // Setup canvas panel
-  setupCanvasPanel();
+  canvasPanel = new CanvasPanel(scene);
 
   // Start render loop
   renderer.setAnimationLoop(render);
 }
 
-function setupCanvasPanel() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 320;
-  canvas.height = 180;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, 320, 180);
-  ctx.fillStyle = '#000';
-  ctx.font = '24px sans-serif';
-  ctx.fillText('WebXR Canvas Panel', 20, 90);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  const geometry = new THREE.PlaneGeometry(0.64, 0.36); // 320:180 scaled down for VR
-  const material = new THREE.MeshBasicMaterial({ map: texture });
-  canvasMesh = new THREE.Mesh(geometry, material);
-  canvasMesh.position.set(0, 1.5, -2); // Position in front of user
-  scene.add(canvasMesh);
-}
-
 function render() {
   if (controllerManager.isRaycastingActive()) {
-    controllerManager.updateIntersection(canvasMesh);
+    controllerManager.updateIntersection(canvasPanel.getMesh());
   }
   renderer.render(scene, camera);
 } 
